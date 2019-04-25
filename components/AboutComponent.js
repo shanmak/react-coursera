@@ -3,15 +3,22 @@ import { Text, ScrollView, View } from 'react-native';
 import { Card, ListItem } from 'react-native-elements';
 import {LEADERS} from '../shared/leaders';
 import { FlatList } from 'react-native-gesture-handler';
+import { connect } from 'react-redux';
+import { baseUrl } from '../shared/baseUrl';
 
+
+const mapStateToProps = state => {
+    return { 
+      leaders: state.leaders 
+    }
+  }
 
 function History(props){
     const history = props.history;
     if(history != null){
 
         return(
-            <Card title={history.title}> 
-            
+            <Card title={history.title}>             
             <Text>{history.line1}</Text>
             <Text>{history.line2}</Text>
             </Card>
@@ -34,10 +41,10 @@ function Leadership(props){
   const renderItem= ({item,index})=>{
         return(
         <ListItem
+        
         title={item.name}
         subtitle={item.description}
-        hideChevron={true}
-        leftAvatar={{source: require('../assets/alberto.png')}}
+        leftAvatar={{source: {uri: baseUrl + item.image,cache:'reload'}}}
         
         />)
     }
@@ -75,8 +82,7 @@ class About extends Component {
 
             },
             Leaders:{
-                title:'Corporate Leadership',
-                leaders:LEADERS
+                title:'Corporate Leadership'            
             }
          }
     }
@@ -87,11 +93,11 @@ class About extends Component {
             <ScrollView>
             <History history={this.state.history} />  
             <Card title={this.state.Leaders.title}>
-            <Leadership leadersList={this.state.Leaders.leaders}></Leadership>
+            <Leadership leadersList={this.props.leaders.leaders}></Leadership>
             </Card>   
             </ScrollView>
             </View>);
     }
 }
  
-export default About;
+export default connect(mapStateToProps)(About);
