@@ -6,15 +6,21 @@ import { PROMOTIONS } from '../shared/promotions';
 import { LEADERS } from '../shared/leaders';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
+import {postFavorite} from '../redux/ActionCreators'
 
 const mapStateToProps = state => {
     return {
       dishes: state.dishes,
       comments: state.comments,
       promotions: state.promotions,
-      leaders: state.leaders
+      leaders: state.leaders,
+      favorites:state.favorites
     }
   }
+
+  const mapDispatchToProps =(dispatch)=>({
+      postFavorite: (dishId)=>dispatch(postFavorite(dishId))
+  })
 
 
 
@@ -33,7 +39,8 @@ function RenderItem(props){
                     <View style={{flexDirection:'row'}}><Avatar containerStyle={style.iconStyle}  rounded icon={{ name: 'home' }} />
                     <Text style={style.titleStyle}>{item.name}</Text></View>
                     <View><Icon name={props.favorite ? 'heart' : 'heart-o'} type='font-awesome' iconStyle={style.cardStyle} 
-                    onPress={() =>props.onPress()} /></View></View>}             
+                    onPress={() =>props.onPress(item.id)} /></View></View>}
+                                 
             titleStyle={{marginTop:20}}
             featuredTitle={item.name}
             featuredSubtitle={item.designation}
@@ -61,7 +68,9 @@ class Home extends Component {
             dishes:DISHES,
             promotions:PROMOTIONS,
             leaders:LEADERS,
-            favorite:false
+            favorite1:0,
+            favorite2:1,
+            favorite3:3
         }
         this.markFavorite = this.markFavorite.bind(this)
     }
@@ -70,26 +79,30 @@ class Home extends Component {
         title: 'Home'
     };
 
-    markFavorite = (prevState)=>{
-        this.setState( prevState=>{return  {favorite : prevState.favorite ? false : true } })
+    markFavorite = (dishId)=>{
+       // this.setState( prevState=>{return  {favorite : prevState.favorite ? false : true } })
+
+      this.props.postFavorite(dishId)
+      console.log('id..'+ dishId);
+      console.log('id..'+ this.props.favorites);
     }
 
     render() {
         return(
         <ScrollView>
             <RenderItem item={this.props.dishes.dishes.filter((dish)=> dish.featured)[0]} 
-               onPress={() => this.markFavorite()}
-               favorite={this.state.favorite} />
+               onPress={(id) => this.markFavorite(id)}
+               favorite={this.props.favorites.some(el=> el===this.state.favorite1)} />
             <RenderItem item={this.props.promotions.promotions.filter((promo)=> promo.featured)[0]} 
-            onPress={() => this.markFavorite()} 
-            favorite={this.state.favorite} />
+            onPress={(id) => this.markFavorite(id)}
+           favorite={this.props.favorites.some(el=> el===this.state.favorite2)} />
             <RenderItem item={this.props.leaders.leaders.filter((leader)=> leader.featured)[0]}
-            onPress={() => this.markFavorite()} 
-            favorite={this.state.favorite}  />
+             onPress={(id)=> this.markFavorite(id)}
+            favorite={this.props.favorites.some(el=> el===this.state.favorite3)} />
         </ScrollView>
         );
     }
-}
+} 
 
 const style = StyleSheet.create({
     iconStyle:{
@@ -113,4 +126,4 @@ const style = StyleSheet.create({
 
     }
 })
-export default connect(mapStateToProps)(Home);
+export default connect(mapStateToProps,mapDispatchToProps)(Home);

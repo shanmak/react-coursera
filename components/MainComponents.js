@@ -7,6 +7,8 @@ import Home from './HomeComponents';
 import { Icon } from 'react-native-elements';
 import Contact from './ContactComponents';
 import About from './AboutComponent';
+import Reservation from './ReservationComponents'
+import Favorites from './FavoriteComponent';
 import {createStackNavigator,createAppContainer,createDrawerNavigator,DrawerItems,SafeAreaView}from 'react-navigation';
 
 import { connect } from 'react-redux';
@@ -125,6 +127,53 @@ const AboutNavigation= new createStackNavigator({
 });
 
 
+const ReservationNavigation= new createStackNavigator({
+
+    Reservation : {screen:Reservation}
+
+},{
+    defaultNavigationOptions:({navigation})=> ({
+        title:'Reservation',
+        headerStyle:{
+            backgroundColor:'#800080',
+            borderBottomColor:'#4B0082'
+        }
+        ,
+        headerTintColor:'#FFFFFF',
+        headerTitle:<View ><Text style={{color:'white',alignContent:"center"} }>Reserve Table</Text></View>,
+        headerTitleStyle:{
+            color:'#800080'
+        },headerLeft: <Icon name="menu" size={30} iconStyle={styles.menuItem}
+        color= 'white'
+        onPress={ () => navigation.toggleDrawer() } />   
+        
+    })
+});
+
+const FavoritesNavigation= new createStackNavigator({
+
+    Favorites : {screen:Favorites}
+
+},{
+    defaultNavigationOptions:({navigation})=> ({
+        title:'Favorites',
+        headerStyle:{
+            backgroundColor:'#800080',
+            borderBottomColor:'#4B0082'
+        }
+        ,
+        headerTintColor:'#FFFFFF',
+        headerTitle:<View ><Text style={{color:'white',alignContent:"center"} }>Favorites</Text></View>,
+        headerTitleStyle:{
+            color:'#800080'
+        },headerLeft: <Icon name="menu" size={30} iconStyle={styles.menuItem}
+        color= 'white'
+        onPress={ () => navigation.toggleDrawer() } />   
+        
+    })
+});
+
+
 const CustomDrawerContentComponent = (props) => (
     <ScrollView>
       <SafeAreaView style={styles.container} forceInset={{ top: 'always', horizontal: 'never' }}>
@@ -200,6 +249,37 @@ const MainDrawNavigation= new createDrawerNavigator({
             
             
         }   
+    },
+    Reservation:{
+        screen:ReservationNavigation,
+        navigationOptions:{
+            title:'Reserve Table',
+            drawerLable:'Reserve Table',
+            drawerIcon:({tintColor})=>(
+                <Icon name='cutlery'
+                type='font-awesome'
+                size={24}
+                color={tintColor} />
+            )          
+            
+            
+        }   
+    },
+
+    Favorites:{
+        screen:FavoritesNavigation,
+        navigationOptions:{
+            title:'My Favorites',
+            drawerLable:'My Favorites',
+            drawerIcon:({tintColor})=>(
+                <Icon name='heart'
+                type='font-awesome'
+                size={24}
+                color={tintColor} />
+            )          
+            
+            
+        }   
     }
 },{
     drawerBackgroundColor:'#FFFFFF',
@@ -221,11 +301,11 @@ class Main extends Component {
       }
 
 render(){
-
+ 
     return(
         <View style={{flex:1,paddingTop:Platform.OS==='ios' ? 0: Expo.Constants.StatusBarHeight }}>
             <AppContainer/>
-    </View>
+     </View>
     );
 }
 

@@ -5,13 +5,15 @@ import {dishes} from './dishes';
 import {leaders} from './leaders';
 import {promotions} from './promotions';
 import {comments} from './comments';
+import {favorites} from './favorites'
 
 export const ConfigureStore =()=>{
     const store= createStore(combineReducers({
         dishes,
         comments,
         leaders,
-        promotions
+        promotions,
+        favorites
     }),applyMiddleware(thunk,logger))
 
     return store;
