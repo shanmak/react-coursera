@@ -5,6 +5,7 @@ import { LEADERS } from '../shared/leaders';
 import { FlatList } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
+import * as Animatable from 'react-native-animatable';
 
 
 const mapStateToProps = state => {
@@ -91,10 +92,12 @@ class About extends Component {
     render() {
         return (<View>
             <ScrollView>
+            <Animatable.View animation="fadeInDown" duration={2000} delay={1000}>
                 <History history={this.state.history} />
                 <Card title={this.state.Leaders.title}>
                     <Leadership leadersList={this.props.leaders.leaders}></Leadership>
                 </Card>
+               </Animatable.View> 
             </ScrollView>
         </View>);
     }
