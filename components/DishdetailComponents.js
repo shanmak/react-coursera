@@ -24,10 +24,19 @@ function RenderDish(props) {
 
     const dish = props.dish;
 
-    handleViewRef = (ref) => {this.view = ref};
+    handleViewRef = (ref) => { this.view = ref };
 
     const recognizeDrag = ({ MoveX, MoveY, dx, dy }) => {
-        return (dx < -200) ? true : false
+
+        if(dx < -200){
+            return 'LTR';
+        }
+        else if(dx > 200){
+            return 'RTL';
+        }else{
+            return false;
+        }
+        
     }
 
     const panResponder = PanResponder.create({
@@ -37,19 +46,37 @@ function RenderDish(props) {
         },
         onPanResponderEnd: (e, gestureState) => {
 
-            if (recognizeDrag(gestureState))
+            switch (recognizeDrag(gestureState)) {
+                case 'LTR':
+                    Alert.alert(
+                        'Alert to Favorires ?',
+                        'Are you sure you wish to add' + dish.name + 'to favorite?',
+                        [{ text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+                        { text: 'OK', onPress: () => console.log('Added to favorite') },
+                        ], { cancelable: false }
+                    );
+                    break;
+                case 'RTL':
+                         props.onPress(); break;                        
+                default:
+                        return true;
 
-                Alert.alert(
-                    'Alert to Favorires ?',
-                    'Are you sure you wish to add' + dish.name + 'to favorite?',
-                    [{ text: 'Cancel', onPress: () => console.log('Camel Pressed'), style: 'cancel' },
-                    { text: 'OK', onPress: () => console.log('Added to favorite') },
-                    ], { cancelable: false }
-                )
-            return true;
+            }
+
+            // if (recognizeDrag(gestureState)) {
+
+            //     Alert.alert(
+            //         'Alert to Favorires ?',
+            //         'Are you sure you wish to add' + dish.name + 'to favorite?',
+            //         [{ text: 'Cancel', onPress: () => console.log('Camel Pressed'), style: 'cancel' },
+            //         { text: 'OK', onPress: () => console.log('Added to favorite') },
+            //         ], { cancelable: false }
+            //     )
+            //     return true;
+            // }
         },
-        onPanResponderGrant:()=> {
-            this.view.pulse(3000).then(endState=> console.log(endState.finished ? 'finished' : 'Cancelled'));
+        onPanResponderGrant: () => {
+            this.view.pulse(3000).then(endState => console.log(endState.finished ? 'finished' : 'Cancelled'));
         }
     })
 
@@ -210,6 +237,8 @@ class Dishdetail extends React.Component {
         this.setState({ Comment: comment })
         console.log('testing Form commet ' + comment)
     }
+
+
 
     render() {
         const dishId = this.props.navigation.getParam('dishId', '');
