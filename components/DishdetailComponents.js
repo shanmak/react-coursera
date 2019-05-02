@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, ScrollView, FlatList, Modal, Alert, PanResponder } from 'react-native';
+import { Text, View, ScrollView, FlatList, Modal, Alert, PanResponder,Share,StyleSheet } from 'react-native';
 import { Card, Icon, Rating, AirbnbRating, Input, Button } from 'react-native-elements';
 import { DISHES } from '../shared/dishes';
 import { COMMENTS } from '../shared/comments';
@@ -13,7 +13,7 @@ const mapStateToProps = state => {
         dishes: state.dishes,
         comments: state.comments
     }
-}
+}  
 
 const mapDispatchToProps = (dispatch) => ({
     postComment: (comment) => dispatch(postComment(comment))
@@ -62,23 +62,21 @@ function RenderDish(props) {
                         return true;
 
             }
-
-            // if (recognizeDrag(gestureState)) {
-
-            //     Alert.alert(
-            //         'Alert to Favorires ?',
-            //         'Are you sure you wish to add' + dish.name + 'to favorite?',
-            //         [{ text: 'Cancel', onPress: () => console.log('Camel Pressed'), style: 'cancel' },
-            //         { text: 'OK', onPress: () => console.log('Added to favorite') },
-            //         ], { cancelable: false }
-            //     )
-            //     return true;
-            // }
         },
         onPanResponderGrant: () => {
             this.view.pulse(3000).then(endState => console.log(endState.finished ? 'finished' : 'Cancelled'));
         }
     })
+
+    const shareDish = (title, message, url) => {
+        Share.share({
+            title: title,
+            message: title + ': ' + message + ' ' + url,
+            url: url
+        },{
+            dialogTitle: 'Share ' + title
+        })
+    }
 
 
 
@@ -92,6 +90,13 @@ function RenderDish(props) {
                         {dish.description}
                     </Text>
                     <Icon raised reverse name='pencil' type='font-awesome' color='#5dade2' onPress={() => props.onPress()} />
+                    <Icon
+                            raised
+                            reverse
+                            name='share'
+                            type='font-awesome'
+                            color='#51D2A8'
+                            onPress={() => shareDish(dish.name, dish.description, baseUrl + dish.image)} />
                 </Card>
             </Animatable.View>
         );

@@ -9,6 +9,7 @@ import Contact from './ContactComponents';
 import About from './AboutComponent';
 import Reservation from './ReservationComponents'
 import Favorites from './FavoriteComponent';
+import Login from './LoginComponent';
 import {createStackNavigator,createAppContainer,createDrawerNavigator,DrawerItems,SafeAreaView}from 'react-navigation';
 
 import { connect } from 'react-redux';
@@ -173,6 +174,29 @@ const FavoritesNavigation= new createStackNavigator({
     })
 });
 
+const LoginNavigation= new createStackNavigator({
+
+    Login : {screen:Login}
+
+},{
+    defaultNavigationOptions:({navigation})=> ({
+        title:'Favorites',
+        headerStyle:{
+            backgroundColor:'#800080',
+            borderBottomColor:'#4B0082'
+        }
+        ,
+        headerTintColor:'#FFFFFF',
+        headerTitle:<View ><Text style={{color:'white',alignContent:"center"} }>Favorites</Text></View>,
+        headerTitleStyle:{
+            color:'#800080'
+        },headerLeft: <Icon name="menu" size={30} iconStyle={styles.menuItem}
+        color= 'white'
+        onPress={ () => navigation.toggleDrawer() } />   
+        
+    })
+});
+
 
 const CustomDrawerContentComponent = (props) => (
     <ScrollView>
@@ -191,7 +215,23 @@ const CustomDrawerContentComponent = (props) => (
   );
 
 const MainDrawNavigation= new createDrawerNavigator({
-
+    
+    Login: {
+        screen:LoginNavigation,
+        navigationOptions:{
+            title:'LOGIN',
+            drawerLable:'LOGIN',
+            drawerIcon: ({ tintColor, focused }) => (
+                <Icon
+                  name='sign-in'
+                  type='font-awesome'            
+                  size={24}
+                  color={tintColor}
+                />
+              )
+                     
+        }
+    },
     Home: {
         screen:HomeNavigation,
         navigationOptions:{
@@ -281,9 +321,10 @@ const MainDrawNavigation= new createDrawerNavigator({
             
         }   
     }
-},{
+},{ 
+    initialRouteName:'Home',
     drawerBackgroundColor:'#FFFFFF',
-contentComponent:CustomDrawerContentComponent
+    contentComponent:CustomDrawerContentComponent
     
     
 })
