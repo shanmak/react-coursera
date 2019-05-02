@@ -187,7 +187,7 @@ const LoginNavigation= new createStackNavigator({
         }
         ,
         headerTintColor:'#FFFFFF',
-        headerTitle:<View ><Text style={{color:'white',alignContent:"center"} }>Favorites</Text></View>,
+        headerTitle:<View ><Text style={{color:'white',alignContent:"center"} }>Login</Text></View>,
         headerTitleStyle:{
             color:'#800080'
         },headerLeft: <Icon name="menu" size={30} iconStyle={styles.menuItem}
