@@ -155,6 +155,8 @@ class RegisterTab extends Component {
                 aspect:[4,3]
             });
 
+            console.log(capturedImage);
+
             if(!captureImage.cancelled){
                 console.log(capturedImage);
                 this.processImage(capturedImage.uri);

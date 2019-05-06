@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
 import {DISHES} from '../shared/dishes';
-import { View,Platform,Text,Image,StyleSheet,ScrollView} from 'react-native';
+import { View,Platform,Text,Image,StyleSheet,ScrollView,ToastAndroid,NetInfo} from 'react-native';
 import Menu from './MenuComponents';
 import Dishdetail from './DishdetailComponents';
 import Home from './HomeComponents';
@@ -339,6 +339,38 @@ class Main extends Component {
         this.props.fetchComments();
         this.props.fetchPromos();
         this.props.fetchLeaders();
+
+        NetInfo.getConnectionInfo().then((infoResult)=>{
+            ToastAndroid.show('Initial Network Connectivity Type: '
+            + infoResult.type + ', effectiveType: ' + infoResult.effectiveType,ToastAndroid.LONG)
+        })
+
+        NetInfo.addEventListener('connectionChange',this.handelConnectivieChange);
+
+      }
+
+      componentWillUnmount(){
+          NetInfo.removeEventListener('connectionChange',this.handelConnectivieChange);
+      }
+
+
+      handelConnectivieChange=(connectionInfo)=>{
+          switch(connectionInfo.type){
+            case 'none':
+            ToastAndroid.show('You are now offline!', ToastAndroid.LONG);
+            break;
+          case 'wifi':
+            ToastAndroid.show('You are now connected to WiFi!', ToastAndroid.LONG);
+            break;
+          case 'cellular':
+            ToastAndroid.show('You are now connected to Cellular!', ToastAndroid.LONG);
+            break;
+          case 'unknown':
+            ToastAndroid.show('You now have unknown connection!', ToastAndroid.LONG);
+            break;
+          default:
+            break;
+          }
       }
 
 render(){
